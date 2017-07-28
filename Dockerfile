@@ -1,4 +1,4 @@
-FROM logstash:5.5.1
+FROM docker.elastic.co/logstash/logstash:5.5.1
 
 RUN logstash-plugin install logstash-filter-translate
 RUN logstash-plugin install logstash-filter-jdbc_streaming
