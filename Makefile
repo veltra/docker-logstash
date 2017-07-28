@@ -1,7 +1,5 @@
 .PHONY: test build
 
-include .env
-
 build:
 	docker build -t veltra/logstash .
 
