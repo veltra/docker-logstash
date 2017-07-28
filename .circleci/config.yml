@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/docker-logstash
+    docker:
+      - image: docker:17.07.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker:
+          reusable: true
+          exclusive: true
+      - run:
+          name: Install bash
+          command: |
+            apk add --no-cache bash curl
+
+      - run:
+          name: Build
+          command: |
+            docker build -t veltra/logstash .
+
+      - run:
+          name: Run tests
+          command: |
+            docker run -p 9600:9600 -d --name logstash veltra/logstash; sleep 15
+            docker run --network container:logstash appropriate/curl --retry 10 --retry-connrefused 'http://localhost:9600/_node/plugins?pretty'
